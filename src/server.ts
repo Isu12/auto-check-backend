@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db";
+import ServiceRecordRoute from "./routes/ServiceRecordRoute";
+import ModificationRequestRoute from "./routes/ModificationRequestRoute";
+
 
 
 dotenv.config();
@@ -12,6 +15,9 @@ const PORT = process.env.PORT || 5000;
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/service-record",ServiceRecordRoute)
+app.use("/api/modification-request",ModificationRequestRoute)
 
 // Database Connection
 connectDB();
