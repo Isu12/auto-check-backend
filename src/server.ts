@@ -1,23 +1,25 @@
+// server.ts
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db";
-import ServiceRecordRoute from "./routes/ServiceRecordRoute";
-
+import stationRoutes from "./routes/ServiceStationRoute";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5555;
 
-// Middlewares
 app.use(cors());
+
+
 app.use(express.json());
 
-app.use("/api/service-record",ServiceRecordRoute)
-
-// Database Connection
+// Database connection
 connectDB();
+
+// Routes
+app.use("/api/stations", stationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
