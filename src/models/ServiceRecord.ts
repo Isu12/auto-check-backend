@@ -2,17 +2,18 @@ import mongoose from "mongoose";
 
 // Defining the ServiceRecord Schema
 const ServiceRecordSchema = new mongoose.Schema({
-  OdometerReading: { type: Number, required: true },
-  DateOfService: { type: Date, required: true },
-  ServiceType: { type: String, required: true },
-  DescriptionOfIssue: { type: String, required: true },
+  OdometerReading: { type: Number, required: false },
+  DateOfService: { type: Date, required: false },
+  ServiceType: { type: String, required: false },
+  DescriptionOfIssue: { type: String, required: false },
   Diagnosis: { type: String, required: false },
   ServiceDetails: { type: String, required: false },
-  PartsUsed: { type: String, required: true },
-  ServiceCost: { type: Number, required: true },
+  PartsUsed: { type: String, required: false },
+  ServiceCost: { type: Number, required: false },
   WarrantyInfo: { type: String, required: false },
   NextServiceDate: { type: Date, required: false },
-  RecommendedServices: { type: String, required: false }
+  RecommendedServices: { type: String, required: false },
+  InvoiceImageURL: { type: String, required: false }
 });
 
 // Creating the ServiceRecord model
