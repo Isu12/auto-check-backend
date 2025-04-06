@@ -4,11 +4,34 @@ import ModificationRequest from "../models/ModificationRequest";
 // Create a new ModificationRequest
 export const createModificationRequest = async (req: Request, res: Response) => {
   try {
-    const modification = new ModificationRequest(req.body);
+    const {
+      vehicleId,
+      ownerId,
+      modificationType,
+      description,
+      proposedChanges,
+      status,
+      images
+    } = req.body;
+
+    const modification = new ModificationRequest({
+      vehicleId,
+      ownerId,
+      modificationType,
+      description,
+      proposedChanges,
+      status,
+      images
+    });
+
     const savedModification = await modification.save();
     res.status(201).json(savedModification);
   } catch (error) {
-    res.status(400).json({ message: "Failed to create Modification request", error });
+    console.error("Error creating modification request:", error);
+    res.status(400).json({ 
+      message: "Failed to create Modification request", 
+      error: error instanceof Error ? error.message : "Unknown error" 
+    });
   }
 };
 
