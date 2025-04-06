@@ -31,7 +31,12 @@ const VehicleSchema = new mongoose.Schema({
   Height: { type: String, required: false },
   Provincial_Council: { type: String, required: false },
   Date_of_First_Registration: { type: String, required: false },
- Taxes_Payable: { type: String, required: false },
+  Taxes_Payable: { type: String, required: false },
+  vehicle_front_img_url: { type: String, required: false },
+  vehicle_left_img_url: { type: String, required: false },
+  vehicle_right_img_url: { type: String, required: false },
+  vehicle_rear_img_url: { type: String, required: false },
+
 
 });
 
