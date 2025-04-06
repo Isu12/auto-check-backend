@@ -2,6 +2,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db";
+
 import stationRoutes from "./routes/ServiceStationRoute";
 import EchoTestRoute from "./routes/EchoTestRoute";
 import InsuranceRoute from "./routes/InsuranceClaimRoute"
@@ -9,6 +10,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import ServiceRecordRoute from "./routes/ServiceRecordRoute";
 import VehicleRoute from "./routes/VehicleRoute";
+import ModificationRequestRoute from "./routes/ModificationRequestRoute";
 
 
 dotenv.config();
@@ -25,12 +27,14 @@ mongoose.connect(process.env.MONGO_URI!)
 app.use(express.json());
 
 app.use("/api/service-record",ServiceRecordRoute)
+
 app.use("/api/vehicle-record",VehicleRoute)
 app.use("/api/service-record",ServiceRecordRoute);
 app.use("/api/echo-test",EchoTestRoute);
 app.use("/api/insurance-claim",InsuranceRoute);
 app.use("/api/stations", stationRoutes);
 
+app.use("/api/modification-request",ModificationRequestRoute)
 
 // Database Connection
 connectDB();
