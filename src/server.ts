@@ -8,6 +8,7 @@ import InsuranceRoute from "./routes/InsuranceClaimRoute"
 import cors from "cors";
 import mongoose from "mongoose";
 import ServiceRecordRoute from "./routes/ServiceRecordRoute";
+import VehicleRoute from "./routes/VehicleRoute";
 
 
 dotenv.config();
@@ -23,6 +24,8 @@ mongoose.connect(process.env.MONGO_URI!)
 
 app.use(express.json());
 
+app.use("/api/service-record",ServiceRecordRoute)
+app.use("/api/vehicle-record",VehicleRoute)
 app.use("/api/service-record",ServiceRecordRoute);
 app.use("/api/echo-test",EchoTestRoute);
 app.use("/api/insurance-claim",InsuranceRoute);
