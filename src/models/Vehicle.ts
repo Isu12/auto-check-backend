@@ -36,13 +36,7 @@ const VehicleSchema = new mongoose.Schema({
   vehicle_left_img_url: { type: String, required: false },
   vehicle_right_img_url: { type: String, required: false },
   vehicle_rear_img_url: { type: String, required: false },
-
-
 });
-
-
-
-
 // Creating the ServiceRecord model
 const Vehicle = mongoose.model("Vehicle", VehicleSchema);
 
