@@ -8,12 +8,9 @@ import EchoTestRoute from "./routes/EchoTestRoute";
 import InsuranceRoute from "./routes/InsuranceClaimRoute"
 import cors from "cors";
 import ServiceRecordRoute from "./routes/ServiceRecordRoute";
-<<<<<<< HEAD
 import AuthRoute from "./routes/Auth/auth.routes"
-=======
 import VehicleRoute from "./routes/VehicleRoute";
 import ModificationRequestRoute from "./routes/ModificationRequestRoute";
->>>>>>> 5d3b652a9c22097cafc1e9b2346b54bbc2761fce
 
 
 dotenv.config();
