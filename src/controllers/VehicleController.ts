@@ -15,7 +15,8 @@ export const createVehicleRecord = async (req: Request, res: Response) => {
 // Get all Vehicles
 export const getVehicleRecord = async (req: Request, res: Response) => {
   try {
-    const stations = await Vehicle.find();
+    const stations = await Vehicle.find().populate('echoTests').populate('insuranceClaims')
+    .populate('serviceRecords');
     res.json(stations);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch the Vehicle", error });
@@ -55,3 +56,4 @@ export const deleteVehicleRecord = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to delete the vehicle", error });
   }
 };
+

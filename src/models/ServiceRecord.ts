@@ -14,7 +14,8 @@ const ServiceRecordSchema = new mongoose.Schema({
   WarrantyInfo: { type: String, required: false },
   NextServiceDate: { type: Date, required: false },
   RecommendedServices: { type: String, required: false },
-  InvoiceImageURL: { type: String, required: false }
+  InvoiceImageURL: { type: String, required: false },
+  user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // Creating the ServiceRecord model

@@ -1,16 +1,62 @@
 import { Request, Response } from "express";
 import EchoTestRecord from "../models/EchoTestRecord";
+import Vehicle from "../models/Vehicle";
+import { updateVehicleRecord } from "./VehicleController";
+import mongoose from "mongoose";
 
-// Create a new station
+
+// export const createTestRecord = async (req: Request, res: Response) => {
+//   try {
+//     const { vehicleId, ...echoTestData } = req.body;
+
+//     const newEchoTest = new EchoTestRecord(echoTestData);
+//     await newEchoTest.save();
+
+//     await Vehicle.findByIdAndUpdate(vehicleId, {
+//       $push: { echoTests: newEchoTest._id },
+//     });
+
+//     res.status(200).json({ message: "Echo test record added successfully!" });
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to add echo test record" });
+//   }
+// };
+
+
+
 export const createTestRecord = async (req: Request, res: Response) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  
   try {
-    const EchoTest = new EchoTestRecord(req.body);
-    const savedTests = await EchoTest.save();
-    res.status(201).json(savedTests);
+    const { vehicleId, ...echoTestData } = req.body;
+
+    const newEchoTest = new EchoTestRecord(echoTestData);
+    await newEchoTest.save({ session });
+
+    await Vehicle.findByIdAndUpdate(
+      vehicleId,
+      { $push: { echoTests: newEchoTest._id } },
+      { session }
+    );
+
+    await session.commitTransaction();
+    res.status(200).json({ 
+      message: "Echo test record added successfully!",
+      recordId: newEchoTest._id 
+    });
   } catch (error) {
-    res.status(400).json({ message: "Failed to create test record", error });
+    await session.abortTransaction();
+    res.status(500).json({ 
+      error: "Failed to add echo test record",
+      details: error 
+    });
+  } finally {
+    session.endSession();
   }
 };
+
+
 
 // Get all stations
 export const getTestRecord = async (req: Request, res: Response) => {

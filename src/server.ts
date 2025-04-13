@@ -31,11 +31,11 @@ app.use(
 
 app.use(express.json());
 
-app.use("/api/service-record",ServiceRecordRoute)
+app.use("/api/service-record/",ServiceRecordRoute)
 
-app.use("/api/vehicle-record",VehicleRoute)
-app.use("/api/service-record",ServiceRecordRoute);
-app.use("/api/echo-test",EchoTestRoute);
+app.use("/api/vehicle-record/",VehicleRoute)
+app.use("/api/service-record/",ServiceRecordRoute);
+app.use("/api/echo-test/",EchoTestRoute);
 app.use("/api/insurance-claim",InsuranceRoute);
 app.use("/api/stations", stationRoutes);
 app.use("/api/auth/",AuthRoute);

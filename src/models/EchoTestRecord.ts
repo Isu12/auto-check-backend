@@ -7,7 +7,8 @@ const EchoTestRecordSchema = new mongoose.Schema({
   ExpiryDate: { type: Date, required: false },
   TestingCenterName: { type: String, required: false },
   TestingCenterBranch: { type: String, required: false },
-  CertificateFileURL: { type: String, required: false }
+  CertificateFileURL: { type: String, required: false },
+  
 });
 
 // Creating the ServiceRecord model

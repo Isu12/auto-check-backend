@@ -13,6 +13,7 @@ const InsuranceClaimRecordSchema = new mongoose.Schema({
   DamageImageURL3: { type: String, required: false },
   DamageImageURL4: { type: String, required: false },
   DamageImageURL5: { type: String, required: false },
+  user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // Creating the ServiceRecord model

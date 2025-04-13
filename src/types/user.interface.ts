@@ -1,3 +1,6 @@
+import mongoose, { Document } from 'mongoose';
+import { IBusiness } from '../models/Auth/user';
+
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
@@ -10,6 +13,7 @@ export interface IUser {
   email: string;
   password: string;
   name: string;
+  business: IBusiness; // Ensure this is typed as IBusiness
   createdAt: Date;
   lastLogin?: Date;
   role: UserRole;

@@ -33,7 +33,7 @@ export const protect = (...roles: UserRole[]): RequestHandler => {
       }
 
       // 4. Attach user data to request
-      (req as AuthRequest).user = decoded;
+      (req as unknown as AuthRequest).user = decoded;
       next();
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {
