@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 // Defining the ServiceRecord Schema
 const ServiceRecordSchema = new mongoose.Schema({
+
   OdometerReading: { type: Number, required: false },
   DateOfService: { type: Date, required: false },
   ServiceType: { type: String, required: false },
