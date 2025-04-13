@@ -3,6 +3,7 @@ import User from '../../models/Auth/user';
 import RefreshToken from '../../models/Auth/refresh-token';
 import crypto from 'crypto';
 import VerificationToken from '../../models/Auth/verification-token';
+import { IBusiness } from '../../models/Auth/user';
 
 // Password validation function
 export const isPasswordValid = (password: string): { isValid: boolean; message: string } => {
@@ -31,48 +32,44 @@ export const isPasswordValid = (password: string): { isValid: boolean; message: 
 
 export const register: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, name, business } = req.body as {
+      email: string;
+      password: string;
+      name: string;
+      business: IBusiness;
+    };
 
-    // Validate email format
+    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      res.status(400).json({
-        success: false,
-        message: 'Invalid email format',
-      });
+      res.status(400).json({ success: false, message: 'Invalid email format' });
       return;
     }
 
-    // Validate password
+    // Password validation
     const passwordValidation = isPasswordValid(password);
     if (!passwordValidation.isValid) {
-      res.status(400).json({
-        success: false,
-        message: passwordValidation.message,
-      });
+      res.status(400).json({ success: false, message: passwordValidation.message });
       return;
     }
 
-    // Check if user already exists
+    // User exists?
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(400).json({
-        success: false,
-        message: 'User with this email already exists',
-      });
+      res.status(400).json({ success: false, message: 'User with this email already exists' });
       return;
     }
 
-    // Create new user
+    // Create user with business data
     const user = await User.create({
       email,
       password,
       name,
-      isEmailVerified: false,
+      business, // Embedding business and branches data directly from the request
       lastLogin: new Date(),
     });
 
-    // Create verification token
+    // Generate and save verification token
     const verificationToken = crypto.randomBytes(32).toString('hex');
     await VerificationToken.create({
       userId: user._id,
@@ -80,14 +77,9 @@ export const register: RequestHandler = async (req: Request, res: Response): Pro
       expiresAt: new Date(Date.now() + 5 * 60 * 1000),
     });
 
-    // Send verification email
-    const verificationLink = `${process.env.FRONTEND_URL}/auth/verify-email?token=${verificationToken}`;
-
-    // Generate tokens
+    // Tokens
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
-
-    // Save refresh token
     await RefreshToken.create({
       token: refreshToken,
       user: user._id,
@@ -101,6 +93,7 @@ export const register: RequestHandler = async (req: Request, res: Response): Pro
       },
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: 'Error registering user',

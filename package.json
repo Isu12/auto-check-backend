@@ -11,12 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-<<<<<<< HEAD
     "bcryptjs": "^3.0.2",
-=======
-    "@types/multer": "^1.4.12",
-    "cloudinary": "^1.41.3",
->>>>>>> 5d3b652a9c22097cafc1e9b2346b54bbc2761fce
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

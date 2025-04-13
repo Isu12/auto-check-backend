@@ -1,9 +1,58 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { IUser, UserRole } from '../../types/user.interface';
 
-const userSchema = new mongoose.Schema<IUser>(
+// Branch schema interface
+interface IBranch {
+  name: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  contactDetails: string;
+  servicesOffered: string[];
+  createdAt: Date;
+}
+
+// Business schema interface
+export interface IBusiness {
+  name: string;
+  type: string;
+  registrationNumber: string;
+  contactDetails: string;
+  website?: string;
+  branches: IBranch[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Branch schema
+const branchSchema = new Schema<IBranch>({
+  name: { type: String, required: true },
+  address: { type: String, required: true },
+  city: { type: String, required: true },
+  postalCode: { type: String, required: true },
+  contactDetails: { type: String, required: true },
+  servicesOffered: [{ type: String, required: true }],
+  createdAt: { type: Date, default: Date.now },
+});
+
+// Business schema with embedded branches
+const businessSchema = new Schema<IBusiness>({
+  name: { type: String, required: true, trim: true },
+  type: { 
+    type: String, 
+    required: true, 
+    enum: ['Insurance Company', 'Eco Test Center', 'Service Center'] 
+  },
+  registrationNumber: { type: String, required: true, unique: true },
+  contactDetails: { type: String, required: true },
+  website: { type: String, required: false },
+  branches: [branchSchema],
+}, { timestamps: true });
+
+// User schema with embedded business
+const userSchema: Schema<IUser> = new Schema(
   {
     userId: {
       type: String,
@@ -19,7 +68,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     password: {
       type: String,
-      required:true,
+      required: true,
     },
     name: {
       type: String,
@@ -33,13 +82,14 @@ const userSchema = new mongoose.Schema<IUser>(
     role: {
       type: String,
       enum: Object.values(UserRole),
-      default: UserRole.USER,
+      default: UserRole.ADMIN,
       required: true,
     },
     lastLogin: {
       type: Date,
       default: null,
     },
+    business: businessSchema, // Directly embedding business schema
   },
   {
     collection: 'users',
@@ -47,14 +97,6 @@ const userSchema = new mongoose.Schema<IUser>(
     autoIndex: true,
   }
 );
-
-// Add pre-save middleware to set userId from _id
-userSchema.pre('save', async function (next) {
-  if (this.isNew) {
-    this.userId = this._id.toString();
-  }
-  next();
-});
 
 // Update password hash middleware to only run for email users
 userSchema.pre('save', async function (next) {

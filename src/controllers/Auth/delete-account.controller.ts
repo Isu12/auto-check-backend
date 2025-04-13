@@ -1,32 +1,10 @@
 import { Request, Response, RequestHandler } from 'express';
 import User from '../../models/Auth/user';
 import RefreshToken from '../../models/Auth/refresh-token';
-import { AuthRequest } from '../../types/request.interface';
 
 export const deleteAccount: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { password } = req.body;
-    const userId = (req as AuthRequest).user.id;
-
-    // Find user
-    const user = await User.findById(userId);
-    if (!user) {
-      res.status(404).json({
-        success: false,
-        message: 'User not found',
-      });
-      return;
-    }
-
-    // Verify password
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      res.status(401).json({
-        success: false,
-        message: 'Incorrect password',
-      });
-      return;
-    }
+    const userId = req.params.id;
 
     // Delete all refresh tokens for this user
     await RefreshToken.deleteMany({ user: userId });

@@ -1,58 +1,58 @@
 import { Request, Response } from "express";
-import ServiceStation from "../models/ServiceStation";
+import Business from "../models/ServiceStation";
 
 
-// Create a new station
-export const createStation = async (req: Request, res: Response) => {
+export const createBusiness = async (req: Request, res: Response) => {
   try {
-    const station = new ServiceStation(req.body);
-    const savedStation = await station.save();
-    res.status(201).json(savedStation);
+    const business = new Business(req.body);
+    const savedTests = await business.save();
+    res.status(201).json(savedTests);
   } catch (error) {
-    res.status(400).json({ message: "Failed to create station", error });
+    res.status(400).json({ message: "Failed to create business record", error });
   }
 };
 
-// Get all stations
-export const getStations = async (req: Request, res: Response) => {
+
+export const getBusinesses = async (req: Request, res: Response) => {
   try {
-    const stations = await ServiceStation.find();
-    res.json(stations);
+    const businesses = await Business.find();
+    res.json(businesses);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch stations", error });
+    res.status(500).json({ message: "Failed to fetch businesses", error });
   }
 };
 
-// Get station by ID
-export const getStationById = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const station = await ServiceStation.findById(req.params.id);
-      if (!station) {
-        res.status(404).json({ message: "Station not found" });
-        return;
-      }
-      res.json(station);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch station", error });
+export const getBusinessById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const business = await Business.findById(req.params.id);
+    if (!business) {
+      res.status(404).json({ message: "Business not found" });
+      return;
     }
-  };
-
-// Update a station
-export const updateStation = async (req: Request, res: Response) => {
-  try {
-    const updatedStation = await ServiceStation.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updatedStation);
+    res.json(business);
   } catch (error) {
-    res.status(400).json({ message: "Failed to update station", error });
+    res.status(500).json({ message: "Failed to fetch business", error });
   }
 };
 
-// Delete a station
-export const deleteStation = async (req: Request, res: Response) => {
+export const updateBusiness = async (req: Request, res: Response) => {
   try {
-    await ServiceStation.findByIdAndDelete(req.params.id);
-    res.json({ message: "Station deleted successfully" });
+    const updatedBusiness = await Business.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedBusiness);
   } catch (error) {
-    res.status(500).json({ message: "Failed to delete station", error });
+    res.status(400).json({ message: "Failed to update business", error });
+  }
+};
+
+export const deleteBusiness = async (req: Request, res: Response) => {
+  try {
+    await Business.findByIdAndDelete(req.params.id);
+    res.json({ message: "Business deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete business", error });
   }
 };

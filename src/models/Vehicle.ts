@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Defining the Vehicle Schema
 const VehicleSchema = new mongoose.Schema({
   Registration_no: { type: String, required: true },
   Chasisis_No: { type: String, required: true },
@@ -9,33 +8,33 @@ const VehicleSchema = new mongoose.Schema({
   NIC: { type: String, required: true },
   Conditions_Special_note: { type: String, required: true },
   Absolute_Owner: { type: String, required: true },
-  Engine_No: { type: String, required: false },
-  Cylinder_Capacity: { type: String, required: false },
+  Engine_No: { type: String },
+  Cylinder_Capacity: { type: String },
   Class_of_Vehicle: { type: String, required: true },
   Taxation_Class: { type: String, required: true },
-  Status_When_Registered: { type: String, required: false },
-  Fuel_Type: { type: String, required: false },
-  Make: { type: String, required: false },
-  Country_of_Origin: { type: String, required: false },
-  Model: { type: String, required: false },
-  Manufactures_Description: { type: String, required: false },
-  Wheel_Base: { type: String, required: false },
-  Type_of_Body: { type: String, required: false },
-  Year_of_Manufacture: { type: String, required: false },
-  Colour: { type: String, required: false },
-  Previous_Owners: { type: String, required: false },
-  Seating_capacity: { type: String, required: false },
-  Weight: { type: String, required: false },
-  Length: { type: String, required: false },
-  Width: { type: String, required: false },
-  Height: { type: String, required: false },
-  Provincial_Council: { type: String, required: false },
-  Date_of_First_Registration: { type: String, required: false },
-  Taxes_Payable: { type: String, required: false },
-  Front_Photo: { type: String, required: false },
-  Left_Photo: { type: String, required: false },
-  Right_Photo: { type: String, required: false },
-  Rear_Photo: { type: String, required: false },
+  Status_When_Registered: { type: String },
+  Fuel_Type: { type: String },
+  Make: { type: String },
+  Country_of_Origin: { type: String },
+  Model: { type: String },
+  Manufactures_Description: { type: String },
+  Wheel_Base: { type: String },
+  Type_of_Body: { type: String },
+  Year_of_Manufacture: { type: String },
+  Colour: { type: String },
+  Previous_Owners: { type: String },
+  Seating_capacity: { type: String },
+  Weight: { type: String },
+  Length: { type: String },
+  Width: { type: String },
+  Height: { type: String },
+  Provincial_Council: { type: String },
+  Date_of_First_Registration: { type: String },
+  Taxes_Payable: { type: String },
+  Front_Photo: { type: String },
+  Left_Photo: { type: String },
+  Right_Photo: { type: String },
+  Rear_Photo: { type: String },
   status: {
     applicationSubmitted: { type: Boolean, default: false },
     documentsVerified: { type: Boolean, default: false },
@@ -54,7 +53,11 @@ const VehicleSchema = new mongoose.Schema({
       'Completed'
     ],
     default: 'Pending Submission'
-  }
+  },
+  // New fields to track records
+  echoTests: [{ type: mongoose.Schema.Types.ObjectId, ref: "EchoTestRecord" }],
+  insuranceClaims: [{ type: mongoose.Schema.Types.ObjectId, ref: "InsuranceClaimRecord" }],
+  serviceRecords: [{type: mongoose.Schema.Types.ObjectId, ref:"ServiceRecord"}]
 });
 
 // Creating the ServiceRecord model
