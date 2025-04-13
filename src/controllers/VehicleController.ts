@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Vehicle from "../models/Vehicle";
+import router from "../routes/VehicleRoute";
 
 // Register a new vehicle
 export const createVehicleRecord = async (req: Request, res: Response) => {
@@ -55,3 +56,4 @@ export const deleteVehicleRecord = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to delete the vehicle", error });
   }
 };
+

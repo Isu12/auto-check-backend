@@ -32,11 +32,31 @@ const VehicleSchema = new mongoose.Schema({
   Provincial_Council: { type: String, required: false },
   Date_of_First_Registration: { type: String, required: false },
   Taxes_Payable: { type: String, required: false },
-  vehicle_front_img_url: { type: String, required: false },
-  vehicle_left_img_url: { type: String, required: false },
-  vehicle_right_img_url: { type: String, required: false },
-  vehicle_rear_img_url: { type: String, required: false },
+  Front_Photo: { type: String, required: false },
+  Left_Photo: { type: String, required: false },
+  Right_Photo: { type: String, required: false },
+  Rear_Photo: { type: String, required: false },
+  status: {
+    applicationSubmitted: { type: Boolean, default: false },
+    documentsVerified: { type: Boolean, default: false },
+    inspectionCompleted: { type: Boolean, default: false },
+    taxesPaid: { type: Boolean, default: false },
+    registrationCompleted: { type: Boolean, default: false },
+  },
+  Completion_Status: { 
+    type: String, 
+    required: false,
+    enum: [
+      'Pending Submission',
+      'Document Verification',
+      'Inspection Pending',
+      'Ready for Completion',
+      'Completed'
+    ],
+    default: 'Pending Submission'
+  }
 });
+
 // Creating the ServiceRecord model
 const Vehicle = mongoose.model("Vehicle", VehicleSchema);
 
