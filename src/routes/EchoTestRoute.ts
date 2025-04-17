@@ -18,6 +18,6 @@ router.post("/", createTestRecord);
 router.get("/",protect(UserRole.ADMIN, UserRole.SUPERADMIN), getTestRecord);
 router.get("/:id",protect(UserRole.ADMIN, UserRole.SUPERADMIN), getTestRecordById);
 router.put("/:id",protect(UserRole.ADMIN, UserRole.SUPERADMIN), updateTestRecord);
-router.delete("/:id",protect(UserRole.SUPERADMIN), deleteTestRecord);
+router.delete("/:id",protect(UserRole.ADMIN), deleteTestRecord);
 
 export default router;

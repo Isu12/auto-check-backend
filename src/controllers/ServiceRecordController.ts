@@ -1,21 +1,52 @@
 import { Request, Response } from "express";
 import ServiceRecord from "../models/ServiceRecord";
+import mongoose from "mongoose";
+import Vehicle from "../models/Vehicle";
 
-// Create a new station
+
 export const createServiceRecord = async (req: Request, res: Response) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  
   try {
-    const station = new ServiceRecord(req.body);
-    const savedStation = await station.save();
-    res.status(201).json(savedStation);
+    const { vehicleId, ...serviceRecordData } = req.body;
+
+    // Create new insurance claim record
+    const newServiceRecord = new ServiceRecord({...serviceRecordData, vehicle: vehicleId}
+    );
+    await newServiceRecord.save({ session });
+
+    // Update the vehicle's insuranceClaims array
+    await Vehicle.findByIdAndUpdate(
+      vehicleId,
+      { $push: { serviceRecords: newServiceRecord._id } },
+      { new: true, session }
+    );
+
+    await session.commitTransaction();
+    res.status(200).json({ 
+      message: "Service record added successfully!",
+      recordId: newServiceRecord._id
+  });
   } catch (error) {
-    res.status(400).json({ message: "Failed to create service record", error });
+    await session.abortTransaction();
+    res.status(500).json({ 
+      error: "Failed to add Service record",
+      details: error 
+    });
+  } finally {
+    session.endSession();
   }
 };
+
 
 // Get all stations
 export const getServiceRecord = async (req: Request, res: Response) => {
   try {
-    const stations = await ServiceRecord.find();
+    const stations = await ServiceRecord.find().populate({
+      path: 'vehicle',
+      select: 'Registration_no Chasisis_No' // Match your Vehicle model exactly
+    });
     res.json(stations);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch service records", error });
@@ -25,7 +56,7 @@ export const getServiceRecord = async (req: Request, res: Response) => {
 // Get station by ID
 export const getServiceRecordById = async (req: Request, res: Response): Promise<void> => {
     try {
-      const station = await ServiceRecord.findById(req.params.id);
+      const station = await ServiceRecord.findById(req.params.id).populate('vehicle');
       if (!station) {
         res.status(404).json({ message: "Station not found" });
         return;

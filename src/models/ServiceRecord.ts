@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import user from "./Auth/user";
 
 // Defining the ServiceRecord Schema
 const ServiceRecordSchema = new mongoose.Schema({
@@ -15,8 +16,16 @@ const ServiceRecordSchema = new mongoose.Schema({
   NextServiceDate: { type: Date, required: false },
   RecommendedServices: { type: String, required: false },
   InvoiceImageURL: { type: String, required: false },
-  user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-});
+  vehicle: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "Vehicle",
+    required: false 
+  },
+  user: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: "User",
+    required: false 
+  },});
 
 // Creating the ServiceRecord model
 const ServiceRecord = mongoose.model("ServiceRecord", ServiceRecordSchema);

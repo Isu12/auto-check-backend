@@ -31,9 +31,14 @@ export const createTestRecord = async (req: Request, res: Response) => {
   try {
     const { vehicleId, ...echoTestData } = req.body;
 
-    const newEchoTest = new EchoTestRecord(echoTestData);
+    // Create the echo test record with vehicle reference
+    const newEchoTest = new EchoTestRecord({
+      ...echoTestData,
+      vehicle: vehicleId  // Add vehicle reference here
+    });
     await newEchoTest.save({ session });
 
+    // Update the vehicle with the echo test reference
     await Vehicle.findByIdAndUpdate(
       vehicleId,
       { $push: { echoTests: newEchoTest._id } },
@@ -60,7 +65,10 @@ export const createTestRecord = async (req: Request, res: Response) => {
 // Get all stations
 export const getTestRecord = async (req: Request, res: Response) => {
   try {
-    const EchoTests = await EchoTestRecord.find();
+    const EchoTests = await EchoTestRecord.find().populate({
+      path: 'vehicle',
+      select: 'Registration_no Chasisis_No'
+    });
     res.json(EchoTests);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch test records", error });
@@ -70,7 +78,7 @@ export const getTestRecord = async (req: Request, res: Response) => {
 // Get station by ID
 export const getTestRecordById = async (req: Request, res: Response): Promise<void> => {
     try {
-      const EchoTest = await EchoTestRecord.findById(req.params.id);
+      const EchoTest = await EchoTestRecord.findById(req.params.id).populate('vehicle');
       if (!EchoTest) {
         res.status(404).json({ message: "Test record not found" });
         return;

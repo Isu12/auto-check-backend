@@ -8,7 +8,16 @@ const EchoTestRecordSchema = new mongoose.Schema({
   TestingCenterName: { type: String, required: false },
   TestingCenterBranch: { type: String, required: false },
   CertificateFileURL: { type: String, required: false },
-  
+  vehicle: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Vehicle",
+      required: false 
+    },
+    user: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "User",
+      required: false 
+    }
 });
 
 // Creating the ServiceRecord model
